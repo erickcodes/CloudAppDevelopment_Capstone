@@ -24,10 +24,12 @@ urlpatterns = [
     # path for logout    
     path(route='logout', view=views.logout_request, name='logout'),
 
+    # path for dealerships
     path(route='', view=views.get_dealerships, name='index'),
 
     # path for dealer reviews view
-
+    path('dealer/<int:dealer_id>/', views.get_dealer_details, name='dealer_details'),
+    
     # path for add a review view
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
