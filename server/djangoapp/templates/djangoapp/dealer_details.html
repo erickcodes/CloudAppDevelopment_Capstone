@@ -18,9 +18,12 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="navbar-header">
-                      <a class="navbar-brand" href="#">eDealership</a>
+                      <a class="navbar-brand" href="/">eDealership</a>
                       <a class="navbar-brand" href="about">About Us</a>
                       <a class="navbar-brand" href="contact">Contact Us</a>
+                      {% if user.is_authenticated %}
+                      <a class="navbar-brand" href="review">Add Review</a>
+                      {% endif %}
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
