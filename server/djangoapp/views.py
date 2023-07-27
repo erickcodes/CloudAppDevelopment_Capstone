@@ -109,6 +109,7 @@ def get_dealer_details(request, dealer_id):
         return HttpResponse(reviews_desc)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, dealer_id):
+    if request.method == "POST":
+        
 
