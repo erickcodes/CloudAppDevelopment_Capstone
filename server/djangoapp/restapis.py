@@ -13,11 +13,10 @@ def get_request(url, api_key=None, **kwargs):
     try:
         # Call get method of requests library with URL and parameters
         if api_key:
-            response = requests.get(url, headers={'Content-Type': 'application/json'},
-                                    params=kwargs)
+            response = requests.get(url, params=kwargs, headers={'Content-Type': 'application/json'})
         else:
             response = requests.get(url, params=kwargs, headers={'Content-Type': 'application/json'},
-                                    HTTPBasicAuth('apikey', api_key))
+                                    auth=HTTPBasicAuth('apikey', api_key))
     except:
         # If any error occurs
         print("Network exception occurred")
@@ -89,14 +88,14 @@ def get_dealer_reviews_from_cf(url, dealerId):
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 def analyze_review_sentiments(text):
-    NLP_url = ""
-    NLP_key = ""
+    NLP_url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/44edc39e-5dce-4083-821c-4c91e01ff72d"
+    NLP_key = "ZxPdVYyYnjfUKA8kgZyPUHjZR1s4Vm8HWp2koti1iH2V"
     params = dict()
     params["text"] = text
     params["version"] = "2022-04-07"
     params["features"] = "sentiment.document"
     params["return_analyzed_text"] = "true"
-    return str(get_request(url=NLP_url, api_key=NLP_key, params)["sentitment"]["document"][""])
+    return get_request(url=NLP_url, api_key=NLP_key, kwargs=params)["sentitment"]["document"]["label"]
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 

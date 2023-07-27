@@ -111,5 +111,15 @@ def get_dealer_details(request, dealer_id):
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
     if request.method == "POST":
-        
-
+        if request.user.is_authenticated:
+            url = "https://us-south.functions.cloud.ibm.com/api/v1/namespaces/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/actions/dealership-package/review"
+            review = dict()
+            review["name"] = request.POST['name']
+            review["dealership"] = dealer_id
+            review["review"] = request.POST['review']
+            review["purchase"] = request.POST['purchase']
+            review["time"] = datetime.utcnow().isoformat()
+            json_payload = dict()
+            json_payload["review"] = review
+            return post_request(url, json_payload, dealerId=dealer_id)
+        return "Not Authorized"

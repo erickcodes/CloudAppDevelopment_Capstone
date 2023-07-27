@@ -11,6 +11,55 @@
 
 </head>
     <body>
-    <!--Add review form here -->
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                      <a class="navbar-brand" href="#">eDealership</a>
+                      <a class="navbar-brand" href="about">About Us</a>
+                      <a class="navbar-brand" href="contact">Contact Us</a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li>
+                         <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                         <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li>
+                         <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group">Login:&ensp;
+                                 <input type="text" class="form-control" placeholder="Username" name="username" >
+                                 <input type="password" class="form-control" placeholder="Password" name="psw" >
+                                 <button class="btn btn-primary" type="submit">Login</button>
+                                 <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                            </div>
+                         </form>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <form action="{% url 'djangoapp:registration' %}" method="post">
+            <div class="container"> <!--Style root div with .container class -->
+                {% csrf_token %}
+                <h1>Sign Up</h1>
+                <hr>
+                <div class="form-group"> <!--Style second div with .form-group class -->
+                    <label for="name"><b>Name</b></label>
+                    <input type="text" class="form-control" placeholder="Enter Name: " name="name" required> <!--Style input with .form-control class -->
+                    <label for="review"><b>Review</b></label>
+                    <input type="textarea" class="form-control" placeholder="Enter Review: " name="review" required> <!--Style input with .form-control class -->
+                    <label for="purchase"><b>Purchase</b></label>
+                    <input type="text" class="form-control" placeholder="Enter Last Name: " name="purchase" required> <!--Style input with .form-control class -->
+                    {% if message %}
+                    <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    <button class="btn btn-primary" type="submit">Sign up</button> <!--Style button with .btn and .btn-primary class -->
+                </div>
+            </div>
+        </form>
     </body>
 </html>
