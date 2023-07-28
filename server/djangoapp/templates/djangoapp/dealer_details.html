@@ -49,16 +49,17 @@
         </nav>
 
     <!-- Add reviews as cards -->
+    <h2>Reviews for <b>{{ dealer_name }}</b></h2>
     <div class="card-columns">
         {% for review_obj in review_list %}
-            <div class="card-columns">
-                <img class="card-img-left" src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" />
-                <div class="card-body">
-                    <h5 class="card-title">{{review_obj.make}}, {{review_obj.model}}</h5>
-                    <h5 class="card-title">{{review_obj.year}}</h5>
-                    <p class="card-text">{{review_obj.review}}</p>
-                </div>
+        <div class="card">
+            <img class="card-img-left" width=30px height=30px src="{{MEDIA_URL}}/emoji/{{review_obj.sentiment}}.png" />
+            <div class="card-body">
+                <h5 class="card-title">{{review_obj.car_make}}, {{review_obj.car_model}}</h5>
+                <h5 class="card-title">{{review_obj.car_year}}</h5>
+                <p class="card-text">{{review_obj.review}}</p>
             </div>
+        </div>
         {% endfor %}
     </div>
     </body>

@@ -81,17 +81,16 @@ def get_dealer_reviews_from_cf(url, dealerId):
     results = []
     json_result = get_request(url, dealerId=dealerId)
     if json_result:
-        reviews = json_result["result"]
-        for review in reviews:
-            review_doc = review["doc"]
+        print(json_result)
+        review_docs = json_result["result"]
+        for review_doc in review_docs:
             review_obj = DealerReview(dealership=review_doc["dealership"], name=review_doc["name"], 
                                       purchase=review_doc["purchase"], review=review_doc["review"], 
                                       purchase_date=review_doc["purchase_date"], 
                                       car_make=review_doc["car_make"], car_model=review_doc["car_model"], 
-                                      car_year=review_doc["car_year"], sentiment=review_doc["sentiment"], 
-                                      id=review_doc["id"])
-            review_obj = analyze_review_sentiments(review_obj.review)
-            review_obj.year = normalize_year_int(review_obj.year)
+                                      car_year=review_doc["car_year"], id=review_doc["id"])
+            review_obj.sentiment = analyze_review_sentiments(review_obj.review)
+            review_obj.car_year = normalize_year_int(review_obj.car_year)
             results.append(review_obj)
     return results
 
@@ -104,7 +103,9 @@ def analyze_review_sentiments(text):
     params["version"] = "2022-04-07"
     params["features"] = "sentiment.document"
     params["return_analyzed_text"] = "true"
-    return get_request(url=NLP_url, api_key=NLP_key, kwargs=params)["sentitment"]["document"]["label"]
+    print(get_request(url=NLP_url, api_key=NLP_key, kwargs=params))
+    return "positive"
+
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 

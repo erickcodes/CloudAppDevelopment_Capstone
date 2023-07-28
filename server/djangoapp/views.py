@@ -15,6 +15,9 @@ import json
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+# API URLS and keys
+review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/dealership-package/review"
+dealership_url = "https://us-south.functions.appdomain.cloud/api/v1/web/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/dealership-package/dealership"
 
 # Create your views here.
 
@@ -88,9 +91,8 @@ def registration_request(request):
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
     if request.method == "GET":
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/dealership-package/dealership"
         # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
+        dealerships = get_dealers_from_cf(dealership_url)
         context = dict()
         # dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
@@ -101,14 +103,14 @@ def get_dealerships(request):
 # Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
     if request.method == "GET":
-        url = "https://us-south.functions.appdomain.cloud/api/v1/web/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/dealership-package/review"
         # Get dealers from the URL
-        reviews = get_dealer_reviews_from_cf(url, dealer_id)
+        reviews = get_dealer_reviews_from_cf(review_url, dealer_id)
         # Concat all dealer's short name
         # reviews_desc = ' '.join([review.review for review in reviews])
         context = dict()
         context['review_list'] = reviews
         context['dealer_id'] = dealer_id
+        context['dealer_name'] = [dealer.full_name for dealer in get_dealers_from_cf(dealership_url)][0]
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
@@ -116,11 +118,12 @@ def add_review(request, dealer_id):
     if request.method == "GET":
         context = dict()
         context['dealer_id'] = dealer_id
+        context['dealer_name'] = [dealer.full_name for dealer in get_dealers_from_cf(dealership_url)][0]
+        context['cars'] = C
         return render(request, 'djangoapp/add_review.html', context)
 
     if request.method == "POST":
         if request.user.is_authenticated:
-            url = "https://us-south.functions.cloud.ibm.com/api/v1/namespaces/40c37a61-b3dc-4acf-9a9b-ca73fc48e1ef/actions/dealership-package/review"
             review = dict()
             review["name"] = request.POST['name']
             review["dealership"] = dealer_id
@@ -129,5 +132,5 @@ def add_review(request, dealer_id):
             review["time"] = datetime.utcnow().isoformat()
             json_payload = dict()
             json_payload["review"] = review
-            return post_request(url, json_payload, dealerId=dealer_id)
+            return post_request(review_url, json_payload, dealerId=dealer_id)
         return "Not Authorized"

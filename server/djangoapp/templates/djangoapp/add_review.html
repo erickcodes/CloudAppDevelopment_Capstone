@@ -40,20 +40,36 @@
                 </ul>
             </div>
         </nav>
-        <form action="{{ BASE_DIR }}/djangoapp/review/{{ dealer_id }}" method="post">
+        {% if user.is_authenticated %}
+        <form action="{% url 'djangoapp:add_review' dealer_id %}" method="post">
             <div class="container"> <!--Style root div with .container class -->
                 {% csrf_token %}
-                <h1>Sign Up</h1>
+                <h1>Add a review about {{ dealer_name}}</h1>
                 <hr>
                 <div class="form-group"> <!--Style second div with .form-group class -->
                     <label for="name"><b>Name</b></label>
                     <input type="text" class="form-control" placeholder="Enter your name here" name="name" required> <!--Style input with .form-control class -->
-                    <label for="review"><b>Review</b></label>
-                    <input type="textarea" class="form-control" placeholder="Enter review here" name="review" required> <!--Style input with .form-control class -->
-                    <label for="purchase"><b>Purchase</b></label>
-                    <input type="text" class="form-control" placeholder="Enter if purchase" name="purchase" required> <!--Style input with .form-control class -->
+                    <label for="content"><b>Enter the review content: </b></label>
+                    <input type="textarea" class="form-control" placeholder="Enter review here" name="content" required> <!--Style input with .form-control class -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="true" id="purchasecheck">
+                        <label class="form-check-label" for="purchasecheck">
+                          Have purchase a car from {{ dealer_name }}
+                        </label>
+                    </div>
+                    <select name="car" id="car" class="form-select" required>
+                        {% for car in cars %}
+                            <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
+                        {% endfor %}
+                   </select>
+                   <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
+                   <script type="text/javascript">
+                        $('.date-own').datepicker({
+                            format: 'mm/dd/yyyy'
+                        });
+                    </script>
                     {% if message %}
-                    <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                    <div class="alert alert-success"> <!--Style the message paragraph with .alert and .alert-warning class -->
                         {{ message }}
                     </div>
                     {% endif %}
@@ -61,5 +77,6 @@
                 </div>
             </div>
         </form>
+        {% endif %}
     </body>
 </html>
