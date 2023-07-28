@@ -65,6 +65,14 @@ def get_dealers_from_cf(url, **kwargs):
             results.append(dealer_obj)
     return results
 
+
+# Helper year function to make datetime into int year 
+# if year already int return original year
+def normalize_year_int(year):
+    if type(year) == str:
+        return int(year[:4])
+    return year
+
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
@@ -83,6 +91,7 @@ def get_dealer_reviews_from_cf(url, dealerId):
                                       car_year=review_doc["car_year"], sentiment=review_doc["sentiment"], 
                                       id=review_doc["id"])
             review_obj = analyze_review_sentiments(review_obj.review)
+            review_obj.year = normalize_year_int(review_obj.year)
             results.append(review_obj)
     return results
 

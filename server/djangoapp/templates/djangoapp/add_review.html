@@ -14,9 +14,9 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="navbar-header">
-                      <a class="navbar-brand" href="#">eDealership</a>
-                      <a class="navbar-brand" href="about">About Us</a>
-                      <a class="navbar-brand" href="contact">Contact Us</a>
+                    <a class="navbar-brand" href="{{ BASE_DIR }}/djangoapp/">eDealership</a>
+                    <a class="navbar-brand" href="{{ BASE_DIR }}/djangoapp/about">About Us</a>
+                    <a class="navbar-brand" href="{{ BASE_DIR }}/djangoapp/contact">Contact Us</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
@@ -40,18 +40,18 @@
                 </ul>
             </div>
         </nav>
-        <form action="{% url 'djangoapp:add_review' %}" method="post">
+        <form action="{{ BASE_DIR }}/djangoapp/review/{{ dealer_id }}" method="post">
             <div class="container"> <!--Style root div with .container class -->
                 {% csrf_token %}
                 <h1>Sign Up</h1>
                 <hr>
                 <div class="form-group"> <!--Style second div with .form-group class -->
                     <label for="name"><b>Name</b></label>
-                    <input type="text" class="form-control" placeholder="Enter Name: " name="name" required> <!--Style input with .form-control class -->
+                    <input type="text" class="form-control" placeholder="Enter your name here" name="name" required> <!--Style input with .form-control class -->
                     <label for="review"><b>Review</b></label>
-                    <input type="textarea" class="form-control" placeholder="Enter Review: " name="review" required> <!--Style input with .form-control class -->
+                    <input type="textarea" class="form-control" placeholder="Enter review here" name="review" required> <!--Style input with .form-control class -->
                     <label for="purchase"><b>Purchase</b></label>
-                    <input type="text" class="form-control" placeholder="Enter Last Name: " name="purchase" required> <!--Style input with .form-control class -->
+                    <input type="text" class="form-control" placeholder="Enter if purchase" name="purchase" required> <!--Style input with .form-control class -->
                     {% if message %}
                     <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
                         {{ message }}
