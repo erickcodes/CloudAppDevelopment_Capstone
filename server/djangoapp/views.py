@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
-from .models import DealerReview, CarDealer
+from .models import DealerReview, CarDealer, CarModel
 # from .restapis import related methods
-from .restapis import get_dealer_reviews_from_cf, get_dealers_from_cf
+from .restapis import get_dealer_reviews_from_cf, get_dealers_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -119,18 +119,24 @@ def add_review(request, dealer_id):
         context = dict()
         context['dealer_id'] = dealer_id
         context['dealer_name'] = [dealer.full_name for dealer in get_dealers_from_cf(dealership_url)][0]
-        context['cars'] = C
+        context['cars'] = CarModel.objects.filter(dealer_id=dealer_id)
         return render(request, 'djangoapp/add_review.html', context)
 
     if request.method == "POST":
         if request.user.is_authenticated:
             review = dict()
+            print(request.POST['purchasecheck'])
             review["name"] = request.POST['name']
             review["dealership"] = dealer_id
-            review["review"] = request.POST['review']
-            review["purchase"] = request.POST['purchase']
-            review["time"] = datetime.utcnow().isoformat()
+            review["review"] = request.POST['content']
+            if request.POST['purchasecheck'] == 'true':   
+                car = CarModel.objects.get(pk=int(request.POST['car']))
+                review["car_make"] = car.car_make.name
+                review["car_model"] = car.model
+                review["car_year"] = car.year
+                review["purchase"] = request.POST['purchasecheck']
+                review["purchase_date"] = request.POST['purchasedate']
             json_payload = dict()
             json_payload["review"] = review
-            return post_request(review_url, json_payload, dealerId=dealer_id)
-        return "Not Authorized"
+            post_request(review_url, json_payload, dealerId=dealer_id)
+        return redirect("djangoapp:dealer_details", dealer_id=dealer_id)

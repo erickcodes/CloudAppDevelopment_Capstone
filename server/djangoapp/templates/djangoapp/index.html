@@ -12,6 +12,11 @@
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/bootstrap-table@1.15.3/dist/extensions/filter-control/bootstrap-table-filter-control.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.17.1/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+    <script>
+        $(function() {
+          $('#table').bootstrapTable()
+        })
+    </script>
 </head>
 
     <body>
@@ -74,10 +79,5 @@
         </tbody>
     </table>
     {% endif %}
-    <script>
-        $(function() {
-          $('#table').bootstrapTable()
-        })
-      </script>
     </body>
 </html>

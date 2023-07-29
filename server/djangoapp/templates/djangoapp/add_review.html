@@ -52,31 +52,29 @@
                     <label for="content"><b>Enter the review content: </b></label>
                     <input type="textarea" class="form-control" placeholder="Enter review here" name="content" required> <!--Style input with .form-control class -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="true" id="purchasecheck">
+                        <input class="form-check-input" type="checkbox" value="True" name="purchasecheck" id="purchasecheck">
                         <label class="form-check-label" for="purchasecheck">
-                          Have purchase a car from {{ dealer_name }}
+                          Have purchased a car from {{ dealer_name }}
                         </label>
                     </div>
+                    <label for="car"><b>Select your car (model-make-year): </b></label>
                     <select name="car" id="car" class="form-select" required>
                         {% for car in cars %}
-                            <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
+                            <option selected value={{car.id}}>{{car.model}}-{{car.car_make.name}}-{{ car.year|date:"Y" }}</option>
                         {% endfor %}
                    </select>
-                   <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">
-                   <script type="text/javascript">
-                        $('.date-own').datepicker({
-                            format: 'mm/dd/yyyy'
-                        });
-                    </script>
-                    {% if message %}
-                    <div class="alert alert-success"> <!--Style the message paragraph with .alert and .alert-warning class -->
-                        {{ message }}
-                    </div>
-                    {% endif %}
-                    <button class="btn btn-primary" type="submit">Sign up</button> <!--Style button with .btn and .btn-primary class -->
+                   </br>
+                   <label for="purchasedate"><b>Enter the purchase date: </b></label>
+                   <input class="date-own form-control" type="text" placeholder="mm/dd/yyyy" name="purchasedate" id="purchasedate">
+                    <button class="btn btn-primary" type="submit">Submit</button> <!--Style button with .btn and .btn-primary class -->
                 </div>
             </div>
         </form>
+        <script type="text/javascript">
+            $('.date-own').datepicker({
+                format: 'mm/dd/yyyy'
+            });
+        </script>
         {% endif %}
     </body>
 </html>
