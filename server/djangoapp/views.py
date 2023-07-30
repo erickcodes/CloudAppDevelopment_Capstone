@@ -125,16 +125,17 @@ def add_review(request, dealer_id):
     if request.method == "POST":
         if request.user.is_authenticated:
             review = dict()
-            print(request.POST['purchasecheck'])
+            print(request.POST)
+            review["id"] = len(get_dealer_reviews_from_cf(review_url, dealer_id)) + 1 # lazy count
             review["name"] = request.POST['name']
             review["dealership"] = dealer_id
             review["review"] = request.POST['content']
-            if request.POST['purchasecheck'] == 'true':   
+            if request.POST.get('purchasecheck', 'false') == 'True':   
                 car = CarModel.objects.get(pk=int(request.POST['car']))
                 review["car_make"] = car.car_make.name
                 review["car_model"] = car.model
-                review["car_year"] = car.year
-                review["purchase"] = request.POST['purchasecheck']
+                review["car_year"] = car.year.year
+                review["purchase"] = bool(request.POST['purchasecheck'])
                 review["purchase_date"] = request.POST['purchasedate']
             json_payload = dict()
             json_payload["review"] = review
